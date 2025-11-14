@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAMBUE - Artesanía en Bambú</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fuentes alternativas para las tipografías solicitadas -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #a04f2d;    /* Marrón cálido del bambú */
+            --color-secondary: #556B2F;  /* Verde oliva natural */
+            --color-accent: #ce9340;     /* Dorado terroso para acentos */
+            --color-light: #d8c8ac;      /* Beige claro para fondos */
+            --color-dark: #a04f2d;       /* Gris oscuro azulado para texto */
+        }
+        
+        /* 
+        PARA USAR LAS TIPOGRAFÍAS SOLICITADAS:
+        
+        1. Descarga las fuentes "Codec Warm Trial News" y "Balsamiq Sans Bold"
+        2. Colócalas en una carpeta "fonts" en tu proyecto
+        3. Descomenta el siguiente código y ajusta las rutas:
+        
+        @font-face {
+            font-family: 'Codec Warm Trial News';
+            src: url('fonts/CodecWarmTrial-News.woff2') format('woff2'),
+                 url('fonts/CodecWarmTrial-News.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Balsamiq Sans';
+            src: url('fonts/BalsamiqSans-Bold.woff2') format('woff2'),
+                 url('fonts/BalsamiqSans-Bold.woff') format('woff');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            /* Codec Warm Trial News (secundaria) - usando Quicksand como alternativa */
+            font-family: 'Quicksand', 'Montserrat', sans-serif;
+            background-color: var(--color-light);
+            color: var(--color-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            /* Balsamiq Sans Bold (primaria) - usando Comfortaa como alternativa */
+            font-family: 'Comfortaa', 'Playfair Display', cursive;
+            font-weight: 700;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Más Información Section */
+        .more-info {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .info-card {
+            background-color: var(--color-light);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .info-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .info-icon {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .info-card h3 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .info-list {
+            list-style: none;
+        }
+        
+        .info-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .info-list li:before {
+            content: "•";
+            color: var(--color-accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            margin: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--color-dark);
+        }
+
+        /* Panel de Administrador */
+        .admin-panel {
+            display: none;
+            padding: 100px 0;
+            background-color: var(--color-light);
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        .admin-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .admin-form h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Quicksand', 'Montserrat', sans-serif;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .login-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.5s ease;
+        }
+        
+        .login-content h2 {
+            color: var(--color-primary);
+            margin-bottom: 30px;
+        }
+        
+        .user-type-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .user-type-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .user-type-btn.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .admin-login {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .admin-login.active {
+            display: block;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #2ecc71;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* Register Modal */
+        .register-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .register-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.5s ease;
+        }
+        
+        .register-content h2 {
+            color: var(--color-primary);
+            margin-bottom: 30px;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(139, 115, 85, 0.95);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            background-color: rgba(139, 115, 85, 0.98);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Comfortaa', 'Playfair Display', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: transform 0.3s ease;
+            color: white;
+        }
+        
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo span {
+            color: white; /* Cambiado a blanco */
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--color-accent);
+        }
+        
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--color-accent);
+            color: var(--color-dark);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-icon, .logout-btn {
+            cursor: pointer;
+            transition: color 0.3s;
+            color: white;
+        }
+        
+        .user-icon:hover, .logout-btn:hover {
+            color: var(--color-accent);
+        }
+        
+        .logout-btn {
+            display: none;
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            color: white;
+        }
+        
+        .mobile-menu:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Profile Modal */
+        .profile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .profile-modal.active {
+            display: flex;
+        }
+        
+        .profile-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.5s ease;
+        }
+        
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .profile-header h2 {
+            color: var(--color-primary);
+            margin: 0;
+        }
+        
+        .close-profile {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .profile-info {
+            margin-bottom: 30px;
+        }
+        
+        .profile-info-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .profile-info-label {
+            font-weight: 600;
+            width: 120px;
+            color: var(--color-primary);
+        }
+        
+        .profile-info-value {
+            flex: 1;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .profile-actions .btn {
+            flex: 1;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--color-accent);
+            color: var(--color-dark);
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            background-color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover:before {
+            left: 100%;
+        }
+        
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background-color: white;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--color-accent);
+            margin: 15px auto;
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .about-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h2 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover {
+            transform: perspective(1000px) rotateY(0);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Process Section */
+        .process {
+            padding: 100px 0;
+            background-color: var(--color-light);
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+        
+        .process-step {
+            flex: 0 0 22%;
+            text-align: center;
+            padding: 30px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .process-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .process-step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .process-step:hover .step-icon {
+            background-color: var(--color-accent);
+            transform: scale(1.1);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--color-accent);
+            color: var(--color-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        /* Products Section */
+        .products {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .product-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(139, 115, 85, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-info h3 {
+            margin-bottom: 10px;
+            color: var(--color-primary);
+        }
+        
+        .product-price {
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 15px;
+        }
+        
+        .discount {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        /* Special Offer */
+        .special-offer {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #6B5B3F 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .special-offer:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(205, 133, 63, 0.1) 0%, transparent 70%);
+            animation: pulse 4s infinite;
+        }
+        
+        .special-offer h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .special-offer p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Features */
+        .features {
+            padding: 100px 0;
+            background-color: var(--color-light);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .feature.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover .feature-icon {
+            color: var(--color-accent);
+            transform: scale(1.1);
+        }
+        
+        .feature h3 {
+            margin-bottom: 15px;
+            color: var(--color-primary);
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .testimonial {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin: 0 15px;
+            min-width: 100%;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.5s ease;
+        }
+        
+        .testimonial.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .testimonial-text:before {
+            content: "\"";  /* Comilla doble escapada */
+            font-size: 4rem;
+            color: var(--color-accent);
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ddd;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-dot.active {
+            background-color: var(--color-primary);
+            transform: scale(1.2);
+        }
+        
+        /* FAQ Section */
+        .faq {
+            padding: 100px 0;
+            background-color: var(--color-light);
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .faq-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .faq-question {
+            background-color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .faq-question h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--color-primary);
+        }
+        
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-answer {
+            background-color: white;
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 500px;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 1500;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cart-sidebar.active {
+            right: 0;
+        }
+        
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .cart-items {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .cart-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-item-details h4 {
+            margin-bottom: 5px;
+            color: var(--color-primary);
+        }
+        
+        .cart-item-price {
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            margin: 0 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        
+        .remove-item {
+            color: #ff6b6b;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #f5f3f0;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--color-dark);
+            color: white;
+            padding: 80px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            color: var(--color-accent);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--color-accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--color-accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #999;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .process-step {
+                flex: 0 0 48%;
+                margin-bottom: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+            
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--color-primary);
+                flex-direction: column;
+                padding: 20px 0;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .process-step {
+                flex: 0 0 100%;
+            }
+            
+            .cart-sidebar {
+                max-width: 100%;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-content">
+            <h2>Bienvenido a BAMBUE</h2>
+            <p>Selecciona tu tipo de usuario</p>
+            
+            <div class="user-type-buttons">
+                <button class="user-type-btn active" data-type="cliente">Cliente</button>
+                <button class="user-type-btn" data-type="administrador">Administrador</button>
+            </div>
+            
+            <div class="admin-login">
+                <div class="form-group">
+                    <label for="adminPassword">Contraseña de Administrador</label>
+                    <input type="password" id="adminPassword" placeholder="Ingresa la contraseña">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="userEmail">Correo Electrónico</label>
+                <input type="email" id="userEmail" placeholder="tu@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="userPassword">Contraseña</label>
+                <input type="password" id="userPassword" placeholder="Ingresa tu contraseña">
+            </div>
+            
+            <div class="error-message" id="loginError">Error: No tienes una cuenta registrada. Por favor, regístrate primero.</div>
+            
+            <button class="btn" id="loginBtn" style="width: 100%;">Ingresar</button>
+            
+            <p style="margin-top: 20px; font-size: 0.9rem;">¿No tienes cuenta? <a href="#" id="registerLink" style="color: var(--color-primary);">Regístrate aquí</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="register-modal" id="registerModal">
+        <div class="register-content">
+            <h2>Crear Cuenta</h2>
+            
+            <div class="form-group">
+                <label for="registerName">Nombre Completo</label>
+                <input type="text" id="registerName" placeholder="Tu nombre completo">
+            </div>
+            
+            <div class="form-group">
+                <label for="registerEmail">Correo Electrónico</label>
+                <input type="email" id="registerEmail" placeholder="tu@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="registerPassword">Contraseña</label>
+                <input type="password" id="registerPassword" placeholder="Crea una contraseña">
+            </div>
+            
+            <div class="form-group">
+                <label for="registerConfirmPassword">Confirmar Contraseña</label>
+                <input type="password" id="registerConfirmPassword" placeholder="Confirma tu contraseña">
+            </div>
+            
+            <div class="error-message" id="registerError"></div>
+            <div class="success-message" id="registerSuccess"></div>
+            
+            <button class="btn" id="registerBtn" style="width: 100%;">Registrarse</button>
+            
+            <p style="margin-top: 20px; font-size: 0.9rem;">¿Ya tienes cuenta? <a href="#" id="loginLink" style="color: var(--color-primary);">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="profile-modal" id="profileModal">
+        <div class="profile-content">
+            <div class="profile-header">
+                <h2>Mi Perfil</h2>
+                <button class="close-profile" id="closeProfile">&times;</button>
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-info-item">
+                    <div class="profile-info-label">Nombre:</div>
+                    <div class="profile-info-value" id="profileName">Carlos Rodríguez</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="profile-info-label">Email:</div>
+                    <div class="profile-info-value" id="profileEmail">carlos@ejemplo.com</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="profile-info-label">Teléfono:</div>
+                    <div class="profile-info-value" id="profilePhone">+505 8888 8888</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="profile-info-label">Dirección:</div>
+                    <div class="profile-info-value" id="profileAddress">Managua, Nicaragua</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="profile-info-label">Tipo de usuario:</div>
+                    <div class="profile-info-value" id="profileType">Cliente</div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="btn" id="editProfileBtn">Editar Perfil</button>
+                <button class="btn" id="orderHistoryBtn">Historial de Pedidos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="imagenes/logo.jpeg" alt="BAMBUE Logo">
+                </div>
+                <div class="mobile-menu">☰</div>
+                <nav>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#proceso">Proceso</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#mas-informacion">Más Info</a></li>
+                        <li><a href="#faq">Preguntas</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                        <li><a href="#admin-panel" id="adminLink" style="display: none;">Panel Admin</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <div class="user-icon" id="userIcon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="cart-icon" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                    <div class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Ilumina tu espacio con naturaleza</h1>
+                <p>Descubre la artesanía en bambú. Lámparas únicas hechas a mano que transforman cualquier ambiente con calidez y estilo natural.</p>
+                <a href="#productos" class="btn">Explorar Colección</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="nosotros">
+        <div class="container">
+            <h2 class="section-title">Sobre BAMBUE</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Artesanía con tradición y propósito</h2>
+                    <p>En BAMBUE, no solo creamos lámparas, sino que tejemos historias a través del bambú, un material noble y sostenible. Nuestra misión es conectar a las personas con la naturaleza a través de piezas únicas que iluminan espacios y corazones.</p>
+                    <p>Nuestro bambú proviene de bosques gestionados sosteniblemente en Nicaragua, donde trabajamos directamente con comunidades locales que han cultivado y cuidado estas tierras por generaciones. Cada compra apoya no solo a nuestros artesanos, sino también a la preservación de estos ecosistemas únicos.</p>
+                    <p>Utilizamos técnicas ancestrales combinadas con diseños contemporáneos, asegurando que cada pieza no solo sea hermosa, sino también duradera y funcional. Desde la selección de la materia prima hasta el último detalle del acabado, cada paso es realizado con dedicación y respeto por el medio ambiente.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Artesano trabajando con bambú">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="proceso">
+        <div class="container">
+            <h2 class="section-title">Nuestro Proceso Artesanal</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Selección del Bambú</h3>
+                    <p>Seleccionamos cuidadosamente cañas de bambú maduras de nuestros bosques sostenibles, asegurando la mejor calidad y resistencia.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3>Corte y Preparación</h3>
+                    <p>El bambú se corta y trata naturalmente para preservar su durabilidad, manteniendo su belleza natural y textura única.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-hands"></i>
+                    </div>
+                    <h3>Artesanía Manual</h3>
+                    <p>Nuestros artesanos moldean y tejen cada pieza a mano, utilizando técnicas transmitidas por generaciones.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Control de Calidad</h3>
+                    <p>Cada lámpara pasa por rigurosos controles para garantizar su perfección antes de llegar a tu hogar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="productos">
+        <div class="container">
+            <h2 class="section-title">Nuestras Lámparas</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Los productos se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offer -->
+    <section class="special-offer">
+        <div class="container">
+            <h2>Oferta Especial de Temporada</h2>
+            <p>¡Aprovecha nuestros descuentos aleatorios en toda nuestra colección de lámparas de bambú!</p>
+            <p>Envío gratis en todos nuestros productos + Garantía de 2 años</p>
+            <a href="#productos" class="btn">Ver Ofertas</a>
+        </div>
+    </section>
+
+    <!-- Panel de Administrador -->
+    <section class="admin-panel" id="admin-panel">
+        <div class="container">
+            <h2 class="section-title">Panel de Administrador</h2>
+            <div class="admin-form">
+                <h3>Agregar Nuevo Producto</h3>
+                <div class="form-group">
+                    <label for="productName">Nombre del Producto</label>
+                    <input type="text" id="productName" placeholder="Ej: Lámpara Aurora">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Descripción</label>
+                    <textarea id="productDescription" placeholder="Describe el producto..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Precio</label>
+                    <input type="number" id="productPrice" placeholder="Ej: 89.99" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="productImage">URL de la Imagen</label>
+                    <input type="text" id="productImage" placeholder="https://ejemplo.com/imagen.jpg">
+                </div>
+                <button class="btn" id="addProductBtn" style="width: 100%;">Agregar Producto</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Más Información Section -->
+    <section class="more-info" id="mas-informacion">
+        <div class="container">
+            <h2 class="section-title">Más Información</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>Preguntas Frecuentes Adicionales</h3>
+                    <ul class="info-list">
+                        <li>¿Cuánto tiempo tarda el proceso de fabricación?</li>
+                        <li>¿Puedo personalizar mi lámpara de bambú?</li>
+                        <li>¿Ofrecen servicios de instalación?</li>
+                        <li>¿Qué tipo de bombillas son compatibles?</li>
+                        <li>¿Hacen envíos a zonas rurales?</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Políticas de Envío y Devolución</h3>
+                    <ul class="info-list">
+                        <li>Envío gratuito en compras mayores a $100</li>
+                        <li>Tiempo de entrega: 3-7 días hábiles</li>
+                        <li>Devoluciones dentro de los 30 días</li>
+                        <li>Productos deben estar en empaque original</li>
+                        <li>Costos de envío en devoluciones por cambio de opinión</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Compromiso Ambiental</h3>
+                    <ul class="info-list">
+                        <li>Por cada lámpara vendida, plantamos un árbol</li>
+                        <li>Embalaje 100% biodegradable</li>
+                        <li>Energía solar en nuestro taller</li>
+                        <li>Programa de reciclaje de productos viejos</li>
+                        <li>Certificación de sostenibilidad</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Clientes Satisfechos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Años de Experiencia</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">98%</span>
+                    <span class="stat-label">Tasa de Satisfacción</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Soporte al Cliente</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Tu Carrito de Compras</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Los productos del carrito se añadirán aquí dinámicamente -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <!-- Resto del contenido (Features, Testimonials, FAQ, Footer) -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">¿Por qué elegir BAMBUE?</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🌿</div>
+                    <h3>Material 100% Sostenible</h3>
+                    <p>Utilizamos bambú de cultivo responsable, un recurso renovable de rápido crecimiento que ayuda a reducir la huella de carbono.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">👐</div>
+                    <h3>Hecho Completamente a Mano</h3>
+                    <p>Cada pieza es única, creada con dedicación por artesanos expertos que dominan técnicas ancestrales.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💡</div>
+                    <h3>Diseño Único y Natural</h3>
+                    <p>Combinamos tradición y modernidad en diseños que iluminan con estilo y respetan la esencia del material.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Envío Gratis y Rápido</h3>
+                    <p>Entregamos tus productos sin costos adicionales en todo el país, con empaques 100% reciclables.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+            <div class="testimonial-slider">
+                <div class="testimonial active">
+                    <p class="testimonial-text">"Compré la lámpara Aurora para mi sala de estar y ha transformado completamente el ambiente. La calidad del bambú y el diseño son excepcionales."</p>
+                    <p class="testimonial-author">- María González</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"El proceso de compra fue muy fácil y el producto llegó perfectamente empaquetado. Definitivamente compraré más lámparas de BAMBUE."</p>
+                    <p class="testimonial-author">- Carlos Rodríguez</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"Me encanta que son productos sostenibles y hechos a mano. Cada lámpara tiene su propia personalidad y carácter único."</p>
+                    <p class="testimonial-author">- Ana Martínez</p>
+                </div>
+            </div>
+            <div class="testimonial-nav">
+                <div class="testimonial-dot active" data-index="0"></div>
+                <div class="testimonial-dot" data-index="1"></div>
+                <div class="testimonial-dot" data-index="2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title">Preguntas Frecuentes</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿De dónde proviene el bambú que utilizan?</h3>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Nuestro bambú proviene de bosques gestionados sosteniblemente en Nicaragua, donde trabajamos con comunidades locales que practican métodos de cultivo responsables. Cada caña es seleccionada cuidadosamente para asegurar la mejor calidad mientras preservamos el ecosistema.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Cómo debo cuidar mi lámpara de bambú?</h3>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Recomendamos limpiar el bambú con un paño seco o ligeramente humedecido. Evita el uso de productos químicos abrasivos. Para mantener su belleza natural, coloca tu lámpara lejos de fuentes directas de calor y humedad excesiva.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Realizan envíos internacionales?</h3>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sí, realizamos envíos a toda Latinoamérica, Estados Unidos y Europa. Los costos y tiempos de entrega varían según el destino. Contáctanos para más información sobre envíos internacionales.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>¿Ofrecen garantía en sus productos?</h3>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Todas nuestras lámparas incluyen una garantía de 2 años contra defectos de fabricación. Además, ofrecemos soporte técnico y asesoramiento para el cuidado de tu producto durante toda su vida útil.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>BAMBUE</h3>
+                    <p>Artesanía en bambú que ilumina espacios y conecta con la naturaleza. Hecho a mano con amor y responsabilidad ambiental.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#proceso">Nuestro Proceso</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#mas-informacion">Más Información</a></li>
+                        <li><a href="#faq">Preguntas Frecuentes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@bambue.com</li>
+                        <li><i class="fas fa-phone"></i> +505 8370 4614</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Nicaragua </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Suscríbete para recibir novedades y ofertas especiales.</p>
+                    <form>
+                        <input type="email" placeholder="Tu correo electrónico" style="padding: 10px; width: 100%; margin-bottom: 10px; border: none; border-radius: 4px;">
+                        <button type="submit" class="btn" style="width: 100%;">Suscribirse</button>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 BAMBUE. Todos los derechos reservados. | Hecho con ❤️ y bambú sostenible</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Variables globales
+        let cart = [];
+        let isLoggedIn = false;
+        let userType = 'cliente';
+        let currentUser = {
+            name: "Carlos Rodríguez",
+            email: "carlos@ejemplo.com",
+            phone: "+505 8370 4614",
+            address: "Nicaragua"
+        };
+        const adminEmail = "diegomartinezgom246@gmail.com";
+        const adminPassword = "Mtzlgomez2"; // Contraseña de administrador
+        
+        // Productos iniciales con imágenes actualizadas de lámparas de bambú
+        let products = [
+            {
+                id: 1,
+                name: "Lámpara Colgante",
+                description: "Diseño moderno con líneas limpias que resaltan la belleza natural del bambú.",
+                price: 89.99,
+                originalPrice: 119.99,
+                image: "imagenes/LamparaCColgante.jpg",
+                discount: 25
+            },
+            {
+                id: 2,
+                name: "Lámpara de pie",
+                description: "Estructura colgante que crea juegos de luz y sombra en cualquier ambiente.",
+                price: 129.99,
+                originalPrice: 159.99,
+                image: "imagenes/Lamparapie.jpg",
+                discount: 25
+            },
+            {
+                id: 3,
+                name: "Lámpara Colgante",
+                description: "Perfecta para mesas de noche o escritorios, con un diseño orgánico y acogedor.",
+                price: 74.99,
+                originalPrice: 99.99,
+                image: "imagenes/Lamparacolgante.jpg",
+                discount: 25
+            }
+        ];
+
+        // Login Modal Functionality
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const userTypeButtons = document.querySelectorAll('.user-type-btn');
+        const adminLogin = document.querySelector('.admin-login');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const userIcon = document.getElementById('userIcon');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loginError = document.getElementById('loginError');
+        const registerError = document.getElementById('registerError');
+        const registerSuccess = document.getElementById('registerSuccess');
+        const adminLink = document.getElementById('adminLink');
+        const adminPanel = document.getElementById('admin-panel');
+        const registerLink = document.getElementById('registerLink');
+        const loginLink = document.getElementById('loginLink');
+
+        // Base de datos simulada de usuarios registrados
+        let registeredUsers = [
+            { email: "cliente@ejemplo.com", password: "cliente123", name: "Cliente Ejemplo" },
+            { email: "usuario@test.com", password: "usuario123", name: "Usuario Test" }
+        ];
+
+        // Mostrar modal de login al cargar la página
+        window.addEventListener('load', () => {
+            loginModal.style.display = 'flex';
+            renderProducts();
+        });
+
+        // Cambiar tipo de usuario
+        userTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                userTypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                userType = button.getAttribute('data-type');
+                
+                if (userType === 'administrador') {
+                    adminLogin.classList.add('active');
+                } else {
+                    adminLogin.classList.remove('active');
+                }
+            });
+        });
+
+        // Abrir modal de registro
+        registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+        });
+
+        // Abrir modal de login desde registro
+        loginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+        });
+
+        // Procesar registro
+        registerBtn.addEventListener('click', () => {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // Validaciones
+            if (!name || !email || !password || !confirmPassword) {
+                registerError.textContent = 'Por favor, completa todos los campos';
+                registerError.style.display = 'block';
+                registerSuccess.style.display = 'none';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Las contraseñas no coinciden';
+                registerError.style.display = 'block';
+                registerSuccess.style.display = 'none';
+                return;
+            }
+            
+            if (password.length < 6) {
+                registerError.textContent = 'La contraseña debe tener al menos 6 caracteres';
+                registerError.style.display = 'block';
+                registerSuccess.style.display = 'none';
+                return;
+            }
+            
+            // Verificar si el usuario ya existe
+            const userExists = registeredUsers.some(user => user.email === email);
+            
+            if (userExists) {
+                registerError.textContent = 'Este correo electrónico ya está registrado';
+                registerError.style.display = 'block';
+                registerSuccess.style.display = 'none';
+                return;
+            }
+            
+            // Registrar nuevo usuario
+            registeredUsers.push({
+                email,
+                password,
+                name
+            });
+            
+            // Éxito en el registro
+            registerError.style.display = 'none';
+            registerSuccess.textContent = '¡Registro exitoso! Ahora puedes iniciar sesión';
+            registerSuccess.style.display = 'block';
+            
+            // Limpiar formulario
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+            
+            // Redirigir al login después de 2 segundos
+            setTimeout(() => {
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'flex';
+                registerSuccess.style.display = 'none';
+            }, 2000);
+        });
+
+        // Procesar login
+        loginBtn.addEventListener('click', () => {
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+            
+            if (!email || !password) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
+            
+            if (userType === 'administrador') {
+                // Verificar credenciales de administrador
+                if (email === adminEmail && password === adminPassword) {
+                    // Login exitoso como administrador
+                    isLoggedIn = true;
+                    userType = 'administrador';
+                    loginModal.style.display = 'none';
+                    logoutBtn.style.display = 'block';
+                    adminLink.style.display = 'block';
+                    adminPanel.classList.add('active');
+                    
+                    alert('¡Bienvenido Administrador a BAMBUE!');
+                    return;
+                } else {
+                    loginError.textContent = 'Error: Credenciales de administrador incorrectas';
+                    loginError.style.display = 'block';
+                    return;
+                }
+            } else {
+                // Verificar credenciales de cliente
+                const user = registeredUsers.find(user => user.email === email && user.password === password);
+                
+                if (user) {
+                    // Login exitoso como cliente
+                    isLoggedIn = true;
+                    userType = 'cliente';
+                    loginModal.style.display = 'none';
+                    logoutBtn.style.display = 'block';
+                    adminPanel.classList.remove('active');
+                    adminLink.style.display = 'none';
+                    
+                    // Actualizar información del usuario actual
+                    currentUser.name = user.name;
+                    currentUser.email = user.email;
+                    
+                    alert('¡Bienvenido a BAMBUE!');
+                } else {
+                    loginError.textContent = 'Error: Correo o contraseña incorrectos';
+                    loginError.style.display = 'block';
+                }
+            }
+        });
+
+        // Abrir perfil de usuario
+        userIcon.addEventListener('click', () => {
+            if (!isLoggedIn) {
+                alert('Por favor, inicia sesión para acceder a tu perfil');
+                loginModal.style.display = 'flex';
+                return;
+            }
+            
+            // Actualizar información en el modal de perfil
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+            document.getElementById('profilePhone').textContent = currentUser.phone;
+            document.getElementById('profileAddress').textContent = currentUser.address;
+            document.getElementById('profileType').textContent = userType === 'administrador' ? 'Administrador' : 'Cliente';
+            
+            profileModal.classList.add('active');
+        });
+
+        // Cerrar perfil
+        closeProfile.addEventListener('click', () => {
+            profileModal.classList.remove('active');
+        });
+
+        // Editar perfil
+        editProfileBtn.addEventListener('click', () => {
+            const newName = prompt('Nuevo nombre:', currentUser.name);
+            const newPhone = prompt('Nuevo teléfono:', currentUser.phone);
+            const newAddress = prompt('Nueva dirección:', currentUser.address);
+            
+            if (newName) currentUser.name = newName;
+            if (newPhone) currentUser.phone = newPhone;
+            if (newAddress) currentUser.address = newAddress;
+            
+            // Actualizar información en el modal
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profilePhone').textContent = currentUser.phone;
+            document.getElementById('profileAddress').textContent = currentUser.address;
+            
+            alert('Perfil actualizado correctamente');
+        });
+
+        // Historial de pedidos
+        orderHistoryBtn.addEventListener('click', () => {
+            alert('Funcionalidad de historial de pedidos en desarrollo');
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            isLoggedIn = false;
+            userType = 'cliente';
+            logoutBtn.style.display = 'none';
+            adminLink.style.display = 'none';
+            adminPanel.classList.remove('active');
+            loginModal.style.display = 'flex';
+            
+            // Reset form
+            document.getElementById('userEmail').value = '';
+            document.getElementById('userPassword').value = '';
+            document.getElementById('adminPassword').value = '';
+            userTypeButtons[0].click();
+            loginError.style.display = 'none';
+        });
+
+        // Carrito functionality
+        const cartIcon = document.getElementById('cartIcon');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        // Abrir/cerrar carrito
+        cartIcon.addEventListener('click', () => {
+            if (!isLoggedIn) {
+                alert('Por favor, inicia sesión para ver tu carrito');
+                loginModal.style.display = 'flex';
+                return;
+            }
+            cartSidebar.classList.add('active');
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartSidebar.classList.remove('active');
+        });
+
+        // Función para añadir al carrito
+        function addToCart(id, name, price, image) {
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price,
+                    image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            cartSidebar.classList.add('active');
+            
+            // Efecto de confirmación
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '¡Añadido!';
+            btn.style.backgroundColor = '#4CAF50';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.backgroundColor = '';
+            }, 1500);
+        }
+
+        // Actualizar carrito
+        function updateCart() {
+            cartItems.innerHTML = '';
+            let total = 0;
+            let totalCount = 0;
+            
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                totalCount += item.quantity;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-details">
+                        <h4>${item.name}</h4>
+                        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn decrease" data-id="${item.id}">-</button>
+                            <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-id="${item.id}">
+                            <button class="quantity-btn increase" data-id="${item.id}">+</button>
+                            <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+                
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Actualizar contador y total
+            document.querySelector('.cart-count').textContent = totalCount;
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            // Añadir event listeners a los botones de cantidad y eliminar
+            document.querySelectorAll('.decrease').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    updateQuantity(id, -1);
+                });
+            });
+            
+            document.querySelectorAll('.increase').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    updateQuantity(id, 1);
+                });
+            });
+            
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', () => {
+                    const id = input.getAttribute('data-id');
+                    const newQuantity = parseInt(input.value);
+                    if (newQuantity < 1) {
+                        input.value = 1;
+                        updateQuantity(id, 0, 1);
+                    } else {
+                        updateQuantity(id, 0, newQuantity);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    removeFromCart(id);
+                });
+            });
+        }
+
+        // Actualizar cantidad
+        function updateQuantity(id, change, newQuantity = null) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                if (newQuantity !== null) {
+                    item.quantity = newQuantity;
+                } else {
+                    item.quantity += change;
+                }
+                
+                if (item.quantity < 1) {
+                    removeFromCart(id);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        // Eliminar del carrito
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCart();
+        }
+
+        // Checkout
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            
+            alert('¡Gracias por tu compra! Serás redirigido al proceso de pago.');
+            // Aquí normalmente redirigirías a una página de checkout
+            cart = [];
+            updateCart();
+            cartSidebar.classList.remove('active');
+        });
+
+        // Función para generar descuentos aleatorios
+        function generateRandomDiscount() {
+            // Probabilidades ajustadas para que sea difícil obtener descuentos altos
+            const random = Math.random();
+            
+            if (random < 0.6) { // 60% de probabilidad
+                return 10;
+            } else if (random < 0.85) { // 25% de probabilidad
+                return 20;
+            } else if (random < 0.95) { // 10% de probabilidad
+                return 30;
+            } else { // 5% de probabilidad
+                return 50;
+            }
+        }
+
+        // Función para renderizar productos
+        function renderProducts() {
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = '';
+            
+            products.forEach(product => {
+                // Aplicar descuento aleatorio
+                const discount = generateRandomDiscount();
+                const discountedPrice = product.originalPrice * (1 - discount / 100);
+                
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                        <div class="product-overlay">
+                            <button class="btn add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${discountedPrice.toFixed(2)}" data-image="${product.image}">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="discount">${discount}% DESCUENTO</div>
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-price">$${discountedPrice.toFixed(2)} <span style="text-decoration: line-through; color: #999; font-size: 0.9rem;">$${product.originalPrice.toFixed(2)}</span></div>
+                        <button class="btn add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${discountedPrice.toFixed(2)}" data-image="${product.image}">Añadir al Carrito</button>
+                    </div>
+                `;
+                
+                productsGrid.appendChild(productCard);
+            });
+            
+            // Añadir event listeners a los botones de añadir al carrito
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (!isLoggedIn) {
+                        alert('Por favor, inicia sesión para añadir productos al carrito');
+                        loginModal.style.display = 'flex';
+                        return;
+                    }
+                    
+                    const id = button.getAttribute('data-id');
+                    const name = button.getAttribute('data-name');
+                    const price = parseFloat(button.getAttribute('data-price'));
+                    const image = button.getAttribute('data-image');
+                    
+                    addToCart(id, name, price, image);
+                });
+            });
+            
+            // Activar animaciones de scroll
+            checkVisibility();
+        }
+
+        // Panel de administrador - Agregar producto
+        const addProductBtn = document.getElementById('addProductBtn');
+        addProductBtn.addEventListener('click', () => {
+            const name = document.getElementById('productName').value;
+            const description = document.getElementById('productDescription').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const image = document.getElementById('productImage').value;
+            
+            if (!name || !description || !price || !image) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
+            
+            // Generar ID único
+            const id = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+            
+            // Añadir producto
+            products.push({
+                id,
+                name,
+                description,
+                price,
+                originalPrice: price * 1.5, // Precio original con un 50% más
+                image,
+                discount: 0 // Se calculará aleatoriamente al renderizar
+            });
+            
+            // Limpiar formulario
+            document.getElementById('productName').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productImage').value = '';
+            
+            // Actualizar productos
+            renderProducts();
+            
+            alert('Producto agregado correctamente');
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('nav ul').classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelector('nav ul').classList.remove('active');
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Scroll animations para todas las secciones
+        function checkVisibility() {
+            const elements = document.querySelectorAll('.about-content, .process-step, .product-card, .feature, .faq-item, .info-card, .stat-item');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkVisibility);
+        window.addEventListener('load', checkVisibility);
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentNode;
+                item.classList.toggle('active');
+            });
+        });
+        
+        // Testimonial slider
+        let currentTestimonial = 0;
+        const testimonials = document.querySelectorAll('.testimonial');
+        const dots = document.querySelectorAll('.testimonial-dot');
+        
+        function showTestimonial(index) {
+            testimonials.forEach(testimonial => {
+                testimonial.classList.remove('active');
+            });
+            dots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            testimonials[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentTestimonial = index;
+        }
+        
+        // Initialize first testimonial
+        if (testimonials.length > 0) {
+            showTestimonial(0);
+            
+            // Auto-rotate testimonials
+            setInterval(() => {
+                let next = currentTestimonial + 1;
+                if (next >= testimonials.length) next = 0;
+                showTestimonial(next);
+            }, 5000);
+        }
+        
+        // Dot click events
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showTestimonial(index);
+            });
+        });
+    </script>
+</body>
+</html>
